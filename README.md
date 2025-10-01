@@ -132,6 +132,8 @@ Publish the website in the given URL.
 </html>
 ```
 # SERVER SIDE PROCESSING:
+![screenshot 2025-10-01 at 21 33 37_a011fce1](https://github.com/user-attachments/assets/4833815f-bbc1-45c6-8326-09b4c57782c8)
+
 
 # HOMEPAGE:
 ![alt text](<Screenshot 2025-10-01 202047.png>)
