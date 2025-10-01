@@ -1,90 +1,79 @@
-# Ex.05 Design a Website for Server Side Processing
-# Date:
-# AIM:
-To design a website to calculate the power of a lamp filament in an incandescent bulb in the server side.
-
-# FORMULA:
-P = I2R
-P --> Power (in watts)
- I --> Intensity
- R --> Resistance
-
-# DESIGN STEPS:
-## Step 1:
-Clone the repository from GitHub.
-
-## Step 2:
-Create Django Admin project.
-
-## Step 3:
-Create a New App under the Django Admin project.
-
-## Step 4:
-Create python programs for views and urls to perform server side processing.
-
-## Step 5:
-Create a HTML file to implement form based input and output.
-
-## Step 6:
-Publish the website in the given URL.
-
-# PROGRAM :
-```
+from http.server import BaseHTTPRequestHandler,HTTPServer
+content ='''
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lamp Filament Power Calculator</title>
+
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: "Poppins", sans-serif;
       background: linear-gradient(135deg, #a8edea, #fed6e3);
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      margin: 0;
     }
+
     .container {
       background: white;
       padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-      width: 350px;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      width: 340px;
       text-align: center;
     }
+
     h1 {
       color: #ff6b81;
       font-size: 22px;
     }
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: 600;
+
+    p {
+      font-weight: bold;
       color: #333;
     }
+
+    label {
+      display: block;
+      text-align: left;
+      margin: 10px 0 5px 10%;
+      font-weight: 500;
+    }
+
     input {
       width: 80%;
       padding: 8px;
-      margin-top: 5px;
       border: 2px solid #ddd;
       border-radius: 8px;
       font-size: 16px;
+      outline: none;
+      transition: border 0.3s;
     }
+
+    input:focus {
+      border-color: #ff6b81;
+    }
+
     button {
       margin-top: 20px;
-      background: #ff6b81;
+      background-color: #ff6b81;
       color: white;
-      border: none;
       padding: 10px 20px;
-      border-radius: 10px;
-      cursor: pointer;
+      border: none;
+      border-radius: 8px;
       font-size: 16px;
-      transition: 0.3s;
+      cursor: pointer;
+      transition: background 0.3s;
     }
+
     button:hover {
-      background: #ff4757;
+      background-color: #ff4757;
     }
+
     .result {
       margin-top: 20px;
       font-size: 18px;
@@ -97,7 +86,7 @@ Publish the website in the given URL.
 
   <div class="container">
     <h1>💡 Lamp Filament Power Calculator</h1>
-    <p>Formula: <strong>P = I² × R</strong></p>
+    <p>Formula: P = I² × R</p>
 
     <label for="intensity">Enter Intensity (I in Amperes):</label>
     <input type="number" id="intensity" step="any" placeholder="e.g., 0.5">
@@ -112,13 +101,13 @@ Publish the website in the given URL.
 
   <script>
     function calculatePower() {
-      const I = parseFloat(document.getElementById('intensity').value);
-      const R = parseFloat(document.getElementById('resistance').value);
-      const resultDiv = document.getElementById('result');
+      const I = parseFloat(document.getElementById("intensity").value);
+      const R = parseFloat(document.getElementById("resistance").value);
+      const resultDiv = document.getElementById("result");
 
       if (isNaN(I) || isNaN(R)) {
-        resultDiv.textContent = "⚠️ Please enter both Intensity and Resistance.";
         resultDiv.style.color = "red";
+        resultDiv.textContent = "⚠️ Please enter both Intensity and Resistance!";
         return;
       }
 
@@ -130,10 +119,18 @@ Publish the website in the given URL.
 
 </body>
 </html>
-```
-# SERVER SIDE PROCESSING:
+'''
+from django.shortcuts import render
 
-# HOMEPAGE:
-![alt text](<Screenshot 2025-10-01 202047.png>)
-# RESULT:
-The program for performing server side processing is completed successfully.
+def lamp_power(request):
+    power = None  # Default value if no calculation yet
+    if request.method == 'POST':
+        try:
+            current = float(request.POST.get('current', 0))
+            resistance = float(request.POST.get('resistance', 0))
+            # Calculate power
+            power = current ** 2 * resistance
+        except ValueError:
+            power = "Invalid input! Please enter numeric values."
+    
+    return render(request, 'lamp_power.html', {'power': power})
