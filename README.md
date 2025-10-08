@@ -30,6 +30,30 @@ Publish the website in the given URL.
 
 # PROGRAM :
 ```
+views.py
+from django.shortcuts import render
+
+def lamp_power(request):
+    power = None  # Default value if no calculation yet
+    if request.method == 'POST':
+        try:
+            current = float(request.POST.get('current', 0))
+            resistance = float(request.POST.get('resistance', 0))
+            # Calculate power
+            power = current ** 2 * resistance
+        except ValueError:
+            power = "Invalid input! Please enter numeric values."
+    
+    return render(request, 'app/lamp_power.html', {'power': power})
+
+urls.py
+from django.urls import path
+from . import views
+from app import views
+urlpatterns = [
+    path('lamp_power/', views.lamp_power, name='lamp_power'),
+]
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
